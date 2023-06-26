@@ -53,4 +53,14 @@ public class PostService {
         return postRepository.findById(id).orElseThrow(()->
                 new IllegalArgumentException("선택한 메모는 존재하지 않습니다."));
     }
+
+    public boolean deletePost(Long id, PostRequestDto postRequestDto) {
+        Post post = findPost(id);
+        if(post.getPassword().equals(postRequestDto.getPassword())){
+            postRepository.delete(post);
+        }else{
+            throw new IllegalArgumentException("비밀번호가 틀립니다.");
+        }
+        return true;
+    }
 }

@@ -2,6 +2,8 @@ package com.sparta.spartalevel1.controller;
 
 import com.sparta.spartalevel1.dto.PostRequestDto;
 import com.sparta.spartalevel1.dto.PostResponseDto;
+import com.sparta.spartalevel1.dto.Result;
+import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,5 +40,10 @@ public class PostController {
         return postService.updatePost(id, postRequestDto);
     }
 
-
+    @DeleteMapping("/post")
+    public Result deletePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto) {
+        Result result = new Result();
+        result.setResult(postService.deletePost(id, postRequestDto));
+        return result;
+    }
 }
