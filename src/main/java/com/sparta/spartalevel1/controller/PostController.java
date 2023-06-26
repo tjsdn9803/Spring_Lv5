@@ -22,4 +22,9 @@ public class PostController {
         return postService.createPost(postRequestDto);
     }
 
+    @GetMapping("/post")
+    public List<PostResponseDto> getPosts(){
+        return postService.getPosts();
+    }
+
 }

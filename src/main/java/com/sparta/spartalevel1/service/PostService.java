@@ -6,6 +6,8 @@ import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostService {
 
@@ -20,5 +22,9 @@ public class PostService {
         Post savePost = postRepository.save(post);
         PostResponseDto postResponseDto = new PostResponseDto(savePost);
         return postResponseDto;
+    }
+
+    public List<PostResponseDto> getPosts() {
+        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
     }
 }
