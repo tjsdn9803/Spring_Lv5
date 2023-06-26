@@ -29,8 +29,14 @@ public class PostController {
     }
 
     @GetMapping("/post/{id}")
-    public Optional<PostResponseDto> getPost(@PathVariable Long id){
+    public PostResponseDto getPost(@PathVariable Long id){
         return postService.getPost(id);
     }
+
+    @PutMapping("/post")
+    public PostResponseDto updatePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto){
+        return postService.updatePost(id, postRequestDto);
+    }
+
 
 }
