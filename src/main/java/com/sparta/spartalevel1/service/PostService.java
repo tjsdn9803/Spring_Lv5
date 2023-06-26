@@ -7,6 +7,7 @@ import com.sparta.spartalevel1.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostService {
@@ -26,5 +27,9 @@ public class PostService {
 
     public List<PostResponseDto> getPosts() {
         return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+    }
+
+    public Optional<PostResponseDto> getPost(Long id) {
+        return postRepository.findById(id).map(PostResponseDto::new);
     }
 }

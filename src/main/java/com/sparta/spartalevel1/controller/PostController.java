@@ -6,6 +6,7 @@ import com.sparta.spartalevel1.service.PostService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -25,6 +26,11 @@ public class PostController {
     @GetMapping("/post")
     public List<PostResponseDto> getPosts(){
         return postService.getPosts();
+    }
+
+    @GetMapping("/post/{id}")
+    public Optional<PostResponseDto> getPost(@PathVariable Long id){
+        return postService.getPost(id);
     }
 
 }
