@@ -40,12 +40,11 @@ public class PostService {
     @Transactional
     public PostResponseDto updatePost(Long id, PostRequestDto postRequestDto, User user) {
         Post post = findPost(id);
-        if(post.getPassword().equals(postRequestDto.getPassword())){
-            post.update(postRequestDto);
+        if(post.getUser().getId() == user.getId()){
+            post.update(postRequestDto, user);
         }else{
-            throw new IllegalArgumentException("비밀번호가 틀립니다.");
+            throw new IllegalArgumentException("회원님이 작성하신 메모가 아닙니다.");
         }
-
         PostResponseDto postResponseDto = new PostResponseDto(post);
         return postResponseDto;
     }
@@ -57,7 +56,7 @@ public class PostService {
 
     public boolean deletePost(Long id, User user) {
         Post post = findPost(id);
-        if(post.getPassword().equals(postRequestDto.getPassword())){
+        if(post.getUser().getId() == user.getId()){
             postRepository.delete(post);
             return true;
         }

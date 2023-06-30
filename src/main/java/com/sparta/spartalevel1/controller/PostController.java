@@ -24,16 +24,17 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public PostResponseDto createPost(@RequestBody PostRequestDto postRequestDto) {
-        return postService.createPost(postRequestDto);
+    public PostResponseDto createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return postService.createPost(postRequestDto, user);
     }
 
-    @GetMapping("/post")
+    @GetMapping("/post/search")
     public List<PostResponseDto> getPosts(){
         return postService.getPosts();
     }
 
-    @GetMapping("/post/{id}")
+    @GetMapping("/post/search/{id}")
     public PostResponseDto getPost(@PathVariable Long id){
         return postService.getPost(id);
     }
