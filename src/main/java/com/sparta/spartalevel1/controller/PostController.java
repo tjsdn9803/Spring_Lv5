@@ -4,7 +4,10 @@ import com.sparta.spartalevel1.dto.PostRequestDto;
 import com.sparta.spartalevel1.dto.PostResponseDto;
 import com.sparta.spartalevel1.dto.Result;
 import com.sparta.spartalevel1.entity.Post;
+import com.sparta.spartalevel1.entity.User;
+import com.sparta.spartalevel1.security.UserDetailsImpl;
 import com.sparta.spartalevel1.service.PostService;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,15 +38,22 @@ public class PostController {
         return postService.getPost(id);
     }
 
-    @PutMapping("/post")
-    public PostResponseDto updatePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto){
-        return postService.updatePost(id, postRequestDto);
+    @PutMapping("/post/update")
+    public PostResponseDto updatePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        return postService.updatePost(id, postRequestDto, user);
     }
 
-    @DeleteMapping("/post")
-    public Result deletePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto) {
-        Result result = new Result();
-        result.setResult(postService.deletePost(id, postRequestDto));
-        return result;
+    @DeleteMapping("/post/delete")
+    public Result deletePost(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+
+        if(postService.deletePost(id, user)){
+            Result result = new Result("삭제", 200);
+            return result;
+        }else{
+            Result result = new Result("삭제 불가능", 403);
+            return result;
+        }
     }
 }
