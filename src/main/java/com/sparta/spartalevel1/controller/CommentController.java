@@ -24,7 +24,7 @@ public class CommentController {
     }
 
     @PostMapping("/comment")
-    public CommentResponseDto createComment(@RequestParam CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         System.out.println("user.getUsername() = " + user.getUsername());
         return commentService.createComment(commentRequestDto, user);
