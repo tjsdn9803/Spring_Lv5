@@ -5,8 +5,10 @@ import com.sparta.spartalevel1.dto.PostResponseDto;
 import com.sparta.spartalevel1.dto.Result;
 import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.entity.User;
+import com.sparta.spartalevel1.entity.UserRoleEnum;
 import com.sparta.spartalevel1.security.UserDetailsImpl;
 import com.sparta.spartalevel1.service.PostService;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,4 +59,25 @@ public class PostController {
             return result;
         }
     }
+
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @PutMapping("/post/secured")
+    public PostResponseDto updatePostByAdmin(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        return postService.updatePost(id, postRequestDto, user);
+    }
+
+    @Secured(UserRoleEnum.Authority.ADMIN)
+    @DeleteMapping("/post/secured")
+    public Result deletePostByAdmin(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        if(postService.deletePost(id, user)){
+            Result result = new Result("삭제", 200);
+            return result;
+        }else{
+            Result result = new Result("삭제 불가능", 403);
+            return result;
+        }
+    }
+
 }
