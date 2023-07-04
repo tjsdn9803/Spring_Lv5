@@ -31,7 +31,7 @@ public class PostController {
         return postService.createPost(postRequestDto, user);
     }
 
-    @GetMapping("/post/search")
+    @GetMapping("/posts/search")
     public List<PostResponseDto> getPosts(){
         return postService.getPosts();
     }
