@@ -36,8 +36,8 @@ public class PostController {
         return postService.getPosts();
     }
 
-    @GetMapping("/post/search/{id}")
-    public PostResponseDto getPost(@PathVariable Long id){
+    @GetMapping("/post/search")
+    public PostResponseDto getPost(@RequestParam Long id){
         return postService.getPost(id);
     }
 
