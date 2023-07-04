@@ -34,7 +34,6 @@ public class CommentController {
         return commentService.findComment(id);
     }
     @GetMapping("/comments/search")
-
     public List<CommentResponseDto> findComments(@RequestBody CommentRequestDto commentRequestDto){
         System.out.println(commentRequestDto.getPostId());
         return commentService.findComments(commentRequestDto);
