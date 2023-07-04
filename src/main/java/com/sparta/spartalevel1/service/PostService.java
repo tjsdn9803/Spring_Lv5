@@ -4,6 +4,7 @@ import com.sparta.spartalevel1.dto.CommentRequestDto;
 import com.sparta.spartalevel1.dto.CommentResponseDto;
 import com.sparta.spartalevel1.dto.PostRequestDto;
 import com.sparta.spartalevel1.dto.PostResponseDto;
+import com.sparta.spartalevel1.entity.Comment;
 import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.entity.User;
 import com.sparta.spartalevel1.repository.CommentRepository;
@@ -11,6 +12,7 @@ import com.sparta.spartalevel1.repository.PostRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,13 +36,23 @@ public class PostService {
 
 
     public List<PostResponseDto> getPosts() {
-        return postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+        List<PostResponseDto> list = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+        List<PostResponseDto> responseDtoList = new ArrayList<>();
+        for(PostResponseDto a : list){
+            Post post = findPost(a.getId());
+            List<CommentResponseDto> commentResponseDtoList = findComments(a.getId());
+            PostResponseDto postResponseDto = new PostResponseDto(post, commentResponseDtoList);
+            responseDtoList.add(postResponseDto);
+        }
+        return responseDtoList;
     }
 
     @Transactional
     public PostResponseDto getPost(Long id) {
         Post post = findPost(id);
-        PostResponseDto postResponseDto = new PostResponseDto(post);
+        List<Comment> commentList = commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
+        List<CommentResponseDto> commentResponseDtoList = findComments(id);
+        PostResponseDto postResponseDto = new PostResponseDto(post, commentResponseDtoList);
         return postResponseDto;
     }
 
@@ -64,12 +76,13 @@ public class PostService {
 
     public boolean deletePost(Long id, User user) {
         Post post = findPost(id);
-        if(post.getUser().getId() == user.getId()){
-            postRepository.delete(post);
-            return true;
+        if(!user.getRole().getAuthority().equals("ROLE_ADMIN")){
+             if(post.getUser().getId() != user.getId()){
+                 throw new IllegalArgumentException("회원님이 작성하신 메모가 아닙니다.");
+             }
         }
-        throw new IllegalArgumentException("회원님이 작성하신 메모가 아닙니다.");
-
+        postRepository.delete(post);
+        return true;
     }
 
     public List<CommentResponseDto> findComments(Long id){

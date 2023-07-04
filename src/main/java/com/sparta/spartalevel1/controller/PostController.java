@@ -13,7 +13,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api")
@@ -41,13 +41,13 @@ public class PostController {
         return postService.getPost(id);
     }
 
-    @PutMapping("/post/update")
+    @PutMapping("/post")
     public PostResponseDto updatePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         return postService.updatePost(id, postRequestDto, user);
     }
 
-    @DeleteMapping("/post/delete")
+    @DeleteMapping("/post")
     public Result deletePost(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
 
