@@ -12,7 +12,7 @@ public class SignupRequestDto {
     private String username;
 
     @Size(min=8, max = 15, message = "8자 이상 15자 이하여야 합니다.")
-    @Pattern(regexp = "^[a-zA-Z0-9]*$")
+    @Pattern(regexp =  "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&])[A-Za-z[0-9]$@$!%*#?&]{8,20}$")
     private String password;
 
     @Email
