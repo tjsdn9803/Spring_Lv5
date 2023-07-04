@@ -23,7 +23,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String username;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<Post> post = new ArrayList<>();
 
     @Column(nullable = false)
@@ -35,6 +35,10 @@ public class User {
     @Column(nullable = false)
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
+
+    @OneToMany(mappedBy = "user")
+    private List<Comment> commentList = new ArrayList<>();
+
 
     public User(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
