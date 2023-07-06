@@ -2,7 +2,6 @@ package com.sparta.spartalevel1.dto;
 
 import jakarta.validation.constraints.*;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class SignupRequestDto {
