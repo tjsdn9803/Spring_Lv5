@@ -69,7 +69,7 @@ public class PostController {
 
     @Secured(UserRoleEnum.Authority.ADMIN)
     @DeleteMapping("/post/secured")
-    public Result deletePostByAdmin(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public ResponseEntity deletePostByAdmin(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         if(postService.deletePost(id, user)){
             Result result = new Result("삭제", 200);
