@@ -1,6 +1,5 @@
 package com.sparta.spartalevel1.service;
 
-import com.sparta.spartalevel1.dto.CommentRequestDto;
 import com.sparta.spartalevel1.dto.CommentResponseDto;
 import com.sparta.spartalevel1.dto.PostRequestDto;
 import com.sparta.spartalevel1.dto.PostResponseDto;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class PostService {
@@ -80,7 +78,6 @@ public class PostService {
         List<Comment> commentList= commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
         for(Comment a : commentList){
             CommentResponseDto commentResponseDto = new CommentResponseDto(a);
-            System.out.println("commentResponseDto = " + commentResponseDto);
             commentResponseDtoList.add(commentResponseDto);
         }
         return commentResponseDtoList;

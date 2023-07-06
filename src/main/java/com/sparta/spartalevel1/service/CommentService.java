@@ -26,20 +26,11 @@ public class CommentService {
 
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto, User user) {
         Post post = postRepository.findById(commentRequestDto.getPostId()).orElseThrow();
-        System.out.println("user.getUsername() = " + user.getUsername());
         Comment comment = new Comment(commentRequestDto, user, post);
-        System.out.println("user.getUsername() = " + user.getUsername());
         Comment saveComment = commentRepsitory.save(comment);
-        System.out.println("saveComment.getUser().getUsername() = " + saveComment.getUser().getUsername());
-        CommentResponseDto commentResponseDto = new CommentResponseDto(saveComment);
-        return commentResponseDto;
+        return new CommentResponseDto(saveComment);
     }
-    public CommentResponseDto findComment(Long id){
-        Comment comment = commentRepsitory.findById(id).orElseThrow();
-        CommentResponseDto commentResponseDto = new CommentResponseDto(comment);
-        return commentResponseDto;
-    }
-    public List<CommentResponseDto> findComments(CommentRequestDto commentRequestDto){
+    public List<CommentResponseDto> getComments(CommentRequestDto commentRequestDto){
         List<CommentResponseDto> commentResponseDtoList = new ArrayList<>();
         List<Comment> commentList = commentRepsitory.findAllByPostIdOrderByCreatedAtDesc(commentRequestDto.getPostId());
         if(commentList.size() == 0){
@@ -47,7 +38,6 @@ public class CommentService {
         }
         for(Comment a : commentList){
             CommentResponseDto commentResponseDto = new CommentResponseDto(a);
-            System.out.println("commentResponseDto = " + commentResponseDto);
             commentResponseDtoList.add(commentResponseDto);
         }
         return commentResponseDtoList;
@@ -59,8 +49,8 @@ public class CommentService {
     }
 
     @Transactional
-    public CommentResponseDto updateComment(long id, CommentRequestDto commentRequestDto, User user) {
-        Comment comment = commentRepsitory.findById(id).orElseThrow();
+    public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto, User user) {
+        Comment comment = findComment(id);
         if(!user.getRole().getAuthority().equals("ROLE_ADMIN")){
             if(comment.getUser().getId() != user.getId()){
                 throw new IllegalArgumentException("회원님이 작성하신 댓글이 아닙니다.");
