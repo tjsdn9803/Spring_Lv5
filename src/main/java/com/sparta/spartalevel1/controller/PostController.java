@@ -8,15 +8,19 @@ import com.sparta.spartalevel1.entity.User;
 import com.sparta.spartalevel1.entity.UserRoleEnum;
 import com.sparta.spartalevel1.security.UserDetailsImpl;
 import com.sparta.spartalevel1.service.PostService;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class PostController {
@@ -28,7 +32,13 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public PostResponseDto createPost(@RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public PostResponseDto createPost(@RequestBody @Valid PostRequestDto postRequestDto, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
+        if(fieldErrors.size() > 0) {
+            for (FieldError fieldError : bindingResult.getFieldErrors()) {
+                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
+            }
+        }
         User user = userDetails.getUser();
         return postService.createPost(postRequestDto, user);
     }
@@ -57,6 +67,7 @@ public class PostController {
         }catch (Exception e){
             return new ResponseEntity(new Result(e.getMessage(), 400), HttpStatusCode.valueOf(400));
         }
+
         return new ResponseEntity(new Result("삭제에 성공하였습니다", 200), HttpStatusCode.valueOf(200));
     }
 

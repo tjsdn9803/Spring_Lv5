@@ -1,7 +1,7 @@
 package com.sparta.spartalevel1.repository;
 
-import org.springframework.data.jpa.repository.JpaRepository;
 import com.sparta.spartalevel1.entity.User;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 

@@ -1,10 +1,8 @@
 package com.sparta.spartalevel1.dto;
 
-import com.sparta.spartalevel1.entity.Comment;
 import com.sparta.spartalevel1.entity.Post;
 import lombok.Getter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

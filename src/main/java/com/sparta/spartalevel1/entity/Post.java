@@ -33,7 +33,7 @@ public class Post extends TimeStamped{
     @Column(name = "content", nullable = false)
     private String content;
 
-    @Column(name = "author", nullable = false, length = 500)
+    @Column(name = "author", nullable = false)
     private String author;
 
     public Post(PostRequestDto postRequestDto, User user){

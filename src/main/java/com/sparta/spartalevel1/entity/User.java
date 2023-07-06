@@ -1,11 +1,8 @@
 package com.sparta.spartalevel1.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.CollectionId;
 
 import java.util.ArrayList;
 import java.util.List;
