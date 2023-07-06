@@ -30,8 +30,7 @@ public class PostService {
     public PostResponseDto createPost(PostRequestDto postRequestDto, User user) {
         Post post = new Post(postRequestDto, user);
         Post savePost = postRepository.save(post);
-        PostResponseDto postResponseDto = new PostResponseDto(savePost);
-        return postResponseDto;
+        return new PostResponseDto(savePost);
     }
 
 
@@ -50,10 +49,8 @@ public class PostService {
     @Transactional
     public PostResponseDto getPost(Long id) {
         Post post = findPost(id);
-        List<Comment> commentList = commentRepository.findAllByPostIdOrderByCreatedAtDesc(id);
         List<CommentResponseDto> commentResponseDtoList = findComments(id);
-        PostResponseDto postResponseDto = new PostResponseDto(post, commentResponseDtoList);
-        return postResponseDto;
+        return new PostResponseDto(post, commentResponseDtoList);
     }
 
     @Transactional
@@ -65,16 +62,10 @@ public class PostService {
             }
         }
         post.update(postRequestDto, user);
-        PostResponseDto postResponseDto = new PostResponseDto(post);
-        return postResponseDto;
+        return new PostResponseDto(post);
     }
 
-    private Post findPost(Long id) {
-        return postRepository.findById(id).orElseThrow(()->
-                new IllegalArgumentException("선택한 메모는 존재하지 않습니다."));
-    }
-
-    public boolean deletePost(Long id, User user) {
+    public void deletePost(Long id, User user) {
         Post post = findPost(id);
         if(!user.getRole().getAuthority().equals("ROLE_ADMIN")){
              if(post.getUser().getId() != user.getId()){
@@ -82,7 +73,6 @@ public class PostService {
              }
         }
         postRepository.delete(post);
-        return true;
     }
 
     public List<CommentResponseDto> findComments(Long id){
@@ -96,5 +86,9 @@ public class PostService {
         return commentResponseDtoList;
     }
 
+    private Post findPost(Long id) {
+        return postRepository.findById(id).orElseThrow(()->
+                new IllegalArgumentException("선택한 메모는 존재하지 않습니다."));
+    }
 
 }
