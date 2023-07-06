@@ -30,9 +30,6 @@ public class Post extends TimeStamped{
     @Column(name = "title", nullable = false)
     private String title;
 
-//    @Column(name = "password", nullable = false)
-//    private String password;
-
     @Column(name = "content", nullable = false)
     private String content;
 
@@ -43,7 +40,6 @@ public class Post extends TimeStamped{
         this.title = postRequestDto.getTitle();
         this.author = user.getUsername();
         this.user = user;
-//        this.password = postRequestDto.getPassword();
         this.content = postRequestDto.getContent();
     }
 
