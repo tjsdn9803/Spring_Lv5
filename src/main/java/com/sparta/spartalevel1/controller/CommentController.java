@@ -28,9 +28,9 @@ public class CommentController {
     @PostMapping("/comment")
     public CommentResponseDto createComment(@RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        System.out.println("user.getUsername() = " + user.getUsername());
         return commentService.createComment(commentRequestDto, user);
     }
+
     @GetMapping("/comment/search")
     public CommentResponseDto findComment(@RequestParam Long id){
         return commentService.getComment(id);
@@ -56,6 +56,7 @@ public class CommentController {
         }
         return new ResponseEntity(new Result("삭제에 성공하였습니다.", 200), HttpStatusCode.valueOf(200));
     }
+
     @Secured(UserRoleEnum.Authority.ADMIN)
     @PutMapping("/comment/secured")
     public CommentResponseDto updateCommentByAdmin(@RequestParam Long id, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
