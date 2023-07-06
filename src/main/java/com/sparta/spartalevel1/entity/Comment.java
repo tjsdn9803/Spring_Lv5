@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class Comment extends TimeStamped{
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "comment_id")
@@ -40,4 +41,5 @@ public class Comment extends TimeStamped{
         this.content = commentRequestDto.getContent();
         this.user = user;
     }
+
 }
