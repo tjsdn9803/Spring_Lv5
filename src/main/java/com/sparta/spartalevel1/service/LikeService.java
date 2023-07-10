@@ -2,6 +2,8 @@ package com.sparta.spartalevel1.service;
 
 
 import com.sparta.spartalevel1.entity.*;
+import com.sparta.spartalevel1.exception.CustomException;
+import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.repository.CommentLikeRepository;
 import com.sparta.spartalevel1.repository.CommentRepository;
 import com.sparta.spartalevel1.repository.PostLikeRepository;
@@ -27,9 +29,9 @@ public class LikeService {
 
     public void deletePostLike(Long postLikeId, User user) {
         PostLike postLike = postLikeRepository.findById(postLikeId).orElseThrow(() ->
-                new IllegalArgumentException("좋아요가 존재하지 않습니다."));
+                new CustomException(ErrorCode.WRONG_LIKE_PID));
         if(!postLike.getUser().getId().equals(user.getId())){
-            throw new IllegalArgumentException("회원님이 누르신 좋아요가 아닙니다.");
+            throw new CustomException(ErrorCode.WRONG_NAME);
         }
         postLikeRepository.delete(postLike);
     }
@@ -41,9 +43,9 @@ public class LikeService {
     }
     public void deleteCommentLike(Long commentLikeId, User user) {
         CommentLike commentLike = commentLikeRepository.findById(commentLikeId).orElseThrow(() ->
-                new IllegalArgumentException("좋아요가 존재하지 않습니다"));
+                new CustomException(ErrorCode.WRONG_LIKE_PID));
         if(!commentLike.getUser().getId().equals(user.getId())){
-            throw new IllegalArgumentException("회원님이 누르신 좋아요가 아닙니다.");
+            throw new CustomException(ErrorCode.WRONG_NAME);
         }
         commentLikeRepository.delete(commentLike);
     }
@@ -51,13 +53,13 @@ public class LikeService {
 
     public Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(()->
-                new IllegalArgumentException("게시글이 존재하지 않습니다.")
+                new CustomException(ErrorCode.WRONG_POST_PID)
         );
     }
 
     public Comment findComment(Long commentId) {
         return commentRepository.findById(commentId).orElseThrow(()->
-                new IllegalArgumentException("댓글이 존재하지 않습니다.")
+                new CustomException(ErrorCode.WRONG_POST_PID)
         );
     }
 

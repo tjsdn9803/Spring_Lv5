@@ -60,7 +60,8 @@ public class PostService {
             }
         }
         post.update(postRequestDto, user);
-        return new PostResponseDto(post);
+        List<CommentResponseDto> commentResponseDtoList = findComments(id);
+        return new PostResponseDto(post, commentResponseDtoList);
     }
 
     public void deletePost(Long id, User user) {

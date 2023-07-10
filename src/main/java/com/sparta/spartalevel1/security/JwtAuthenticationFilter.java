@@ -67,7 +67,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
         response.setStatus(401);
         int status = response.getStatus();
-        String a = "{ \"msg\" : \"login failed\", \n \"status\" : \""+ status+ "\" \n}";
+        String a = "{\n \"msg\" : \"login failed\", \n \"status\" : \""+ status+ "\" \n}";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValueAsString(a);

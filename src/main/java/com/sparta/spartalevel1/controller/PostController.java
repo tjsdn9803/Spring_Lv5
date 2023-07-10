@@ -1,5 +1,6 @@
 package com.sparta.spartalevel1.controller;
 
+import com.sparta.spartalevel1.dto.JsonResponse;
 import com.sparta.spartalevel1.dto.PostRequestDto;
 import com.sparta.spartalevel1.dto.PostResponseDto;
 import com.sparta.spartalevel1.dto.Result;
@@ -40,12 +41,12 @@ public class PostController {
             }
         }
         User user = userDetails.getUser();
-        return postService.createPost(postRequestDto, user);
+        return JsonResponse.success(postService.createPost(postRequestDto, user));
     }
 
     @GetMapping("/posts/search")
-    public List<PostResponseDto> getPosts(){
-        return postService.getPosts();
+    public JsonResponse<List<PostResponseDto>> getPosts(){
+        return JsonResponse.success(postService.getPosts());
     }
 
     @GetMapping("/post/search")
@@ -73,21 +74,18 @@ public class PostController {
 
     @Secured(UserRoleEnum.Authority.ADMIN)
     @PutMapping("/post/secured")
-    public PostResponseDto updatePostByAdmin(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public JsonResponse<PostResponseDto> updatePostByAdmin(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        return postService.updatePost(id, postRequestDto, user);
+        return JsonResponse.success(postService.updatePost(id, postRequestDto, user));
     }
 
     @Secured(UserRoleEnum.Authority.ADMIN)
     @DeleteMapping("/post/secured")
-    public ResponseEntity deletePostByAdmin(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public JsonResponse<Result> deletePostByAdmin(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        try {
-            postService.deletePost(id, user);
-        }catch (Exception e){
-            return new ResponseEntity(new Result(e.getMessage(), 403), HttpStatusCode.valueOf(403));
-        }
-        return new ResponseEntity(new Result("삭제 성공", 200), HttpStatusCode.valueOf(200));
+        postService.deletePost(id, user);
+        Result result = new Result("삭제 성공", 200);
+        return JsonResponse.success(result);
     }
 
 }

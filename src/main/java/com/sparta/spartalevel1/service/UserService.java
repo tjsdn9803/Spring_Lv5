@@ -42,7 +42,7 @@ public class UserService {
         UserRoleEnum role = UserRoleEnum.USER;
         if(requestDto.isAdmin()){
             if(!ADMIN_TOKEN.equals(requestDto.getAdminToken())){
-                throw new IllegalArgumentException("관리자 암호가 틀림");
+                throw new CustomException(ErrorCode.WRONG_ADMIN_PASSWORD);
             }
             role = UserRoleEnum.ADMIN;
         }
