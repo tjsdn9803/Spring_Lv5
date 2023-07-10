@@ -9,6 +9,7 @@ public class CommentResponseDto {
     private Long id;
     private String content;
     private String username;
+    private Long like;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
 
@@ -19,5 +20,4 @@ public class CommentResponseDto {
         this.createdAt = saveComment.getCreatedAt();
         this.modifiedAt = saveComment.getModifiedAt();
     }
-
 }

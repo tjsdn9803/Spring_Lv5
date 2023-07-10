@@ -13,6 +13,7 @@ public class PostResponseDto {
     private String title;
     private String content;
     private String author;
+    private Long like;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
     private List<CommentResponseDto> commentList = new ArrayList<>();
@@ -35,5 +36,6 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
         this.commentList = commentList;
+        this.like = (long) post.getPostLikeList().size();
     }
 }
