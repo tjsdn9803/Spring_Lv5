@@ -15,11 +15,15 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/like/post")
-    public void postLike(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public void postLike(@RequestParam Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         likeService.postLike(postId, user);
     }
-  
+    @DeleteMapping("/like/post")
+    public void deletePostLike(@RequestParam Long postLikeId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        likeService.deletePostLike(postLikeId,user);
+    }
 
 //    @PostMapping("/like/comment")
 //    public likeResponseDto likePost(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {

@@ -26,4 +26,21 @@ public class LikeService {
         postLikeRepository.save(postLike);
     }
 
+    public void deletePostLike(Long postLikeId, User user) {
+        PostLike postLike = postLikeRepository.findById(postLikeId).orElseThrow(() ->
+                new IllegalArgumentException("좋아요가 존재하지 않습니다."));
+        System.out.println("postLike.getUser() = " + postLike.getUser().getId());
+        System.out.println("user.getId() = " + user.getId());
+        if(!postLike.getUser().getId().equals(user.getId())){
+            throw new IllegalArgumentException("회원님이 누르신 좋아요가 아닙니다.");
+        }
+        postLikeRepository.delete(postLike);
+    }
+
+    public Post findPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(()->
+                new IllegalArgumentException("게시글이 존재하지 않습니다.")
+        );
+    }
+
 }
