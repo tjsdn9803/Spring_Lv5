@@ -19,5 +19,6 @@ public class CommentResponseDto {
         this.username = saveComment.getUser().getUsername();
         this.createdAt = saveComment.getCreatedAt();
         this.modifiedAt = saveComment.getModifiedAt();
+        this.like = (long) saveComment.getCommentLikeList().size();
     }
 }

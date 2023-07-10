@@ -1,9 +1,12 @@
 package com.sparta.spartalevel1.controller;
 
+import com.sparta.spartalevel1.dto.Result;
 import com.sparta.spartalevel1.entity.User;
 import com.sparta.spartalevel1.security.UserDetailsImpl;
 import com.sparta.spartalevel1.service.LikeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,7 +18,7 @@ public class LikeController {
     private final LikeService likeService;
 
     @PostMapping("/like/post")
-    public void postLike(@RequestParam Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity postLike(@RequestParam Long postId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         likeService.postLike(postId, user);
         return new ResponseEntity(new Result("게시글에 좋아요가 저장되었습니다.", 200), HttpStatusCode.valueOf(200));
