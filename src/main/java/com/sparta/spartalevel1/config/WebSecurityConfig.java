@@ -66,7 +66,7 @@ public class WebSecurityConfig {
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/").permitAll() // 메인 페이지 요청 허가
                         .requestMatchers("/api/post/search/**").permitAll() // '/api/post/search' 로 시작하는 요청 모두 접근 허가
-                        .requestMatchers("/api/post/search").permitAll()
+                        .requestMatchers("/api/posts/search").permitAll()
                         .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
                         .requestMatchers("/api/comment/search/**").permitAll()
                         .requestMatchers("/api/comments/search").permitAll()
