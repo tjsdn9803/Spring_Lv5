@@ -35,6 +35,12 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Comment> commentList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<PostLike> postLikeList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<CommentLike> commentLikeList = new ArrayList<>();
+
 
     public User(String username, String password, String email, UserRoleEnum role) {
         this.username = username;
