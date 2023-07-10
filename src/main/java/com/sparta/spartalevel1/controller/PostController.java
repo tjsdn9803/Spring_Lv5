@@ -33,13 +33,7 @@ public class PostController {
     }
 
     @PostMapping("/post")
-    public PostResponseDto createPost(@RequestBody @Valid PostRequestDto postRequestDto, BindingResult bindingResult, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        if(fieldErrors.size() > 0) {
-            for (FieldError fieldError : bindingResult.getFieldErrors()) {
-                log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
-            }
-        }
+    public JsonResponse<PostResponseDto> createPost(@RequestBody @Valid PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         return JsonResponse.success(postService.createPost(postRequestDto, user));
     }
@@ -50,26 +44,22 @@ public class PostController {
     }
 
     @GetMapping("/post/search")
-    public PostResponseDto getPost(@RequestParam Long id){
-        return postService.getPost(id);
+    public JsonResponse<PostResponseDto> getPost(@RequestParam Long id){
+        return JsonResponse.success(postService.getPost(id));
     }
 
     @PutMapping("/post")
-    public PostResponseDto updatePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public JsonResponse<PostResponseDto> updatePost(@RequestParam Long id, @RequestBody PostRequestDto postRequestDto, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
-        return postService.updatePost(id, postRequestDto, user);
+        return JsonResponse.success(postService.updatePost(id, postRequestDto, user));
     }
 
     @DeleteMapping("/post")
-    public ResponseEntity deletePost(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public JsonResponse<Result> deletePost(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        try{
-            postService.deletePost(id,user);
-        }catch (Exception e){
-            return new ResponseEntity(new Result(e.getMessage(), 400), HttpStatusCode.valueOf(400));
-        }
-
-        return new ResponseEntity(new Result("삭제에 성공하였습니다", 200), HttpStatusCode.valueOf(200));
+        postService.deletePost(id,user);
+        Result result = new Result("삭제 성공", 200);
+        return JsonResponse.success(result);
     }
 
     @Secured(UserRoleEnum.Authority.ADMIN)

@@ -26,6 +26,7 @@ public class PostResponseDto {
         this.author = post.getAuthor();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
+        this.like = (long) post.getPostLikeList().size();
     }
 
     public PostResponseDto(Post post, List<CommentResponseDto> commentList) {

@@ -6,6 +6,8 @@ import com.sparta.spartalevel1.dto.PostResponseDto;
 import com.sparta.spartalevel1.entity.Comment;
 import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.entity.User;
+import com.sparta.spartalevel1.exception.CustomException;
+import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.repository.CommentRepository;
 import com.sparta.spartalevel1.repository.PostRepository;
 import org.springframework.stereotype.Service;
@@ -56,7 +58,7 @@ public class PostService {
         Post post = findPost(id);
         if(!user.getRole().getAuthority().equals("ROLE_ADMIN")){
             if(post.getUser().getId() != user.getId()){
-                throw new IllegalArgumentException("회원님이 작성하신 메모가 아닙니다.");
+                throw new CustomException(ErrorCode.WRONG_NAME);
             }
         }
         post.update(postRequestDto, user);
@@ -68,7 +70,7 @@ public class PostService {
         Post post = findPost(id);
         if(!user.getRole().getAuthority().equals("ROLE_ADMIN")){
              if(post.getUser().getId() != user.getId()){
-                 throw new IllegalArgumentException("회원님이 작성하신 메모가 아닙니다.");
+                 throw new CustomException(ErrorCode.WRONG_NAME);
              }
         }
         postRepository.delete(post);
@@ -86,7 +88,7 @@ public class PostService {
 
     private Post findPost(Long id) {
         return postRepository.findById(id).orElseThrow(()->
-                new IllegalArgumentException("선택한 메모는 존재하지 않습니다."));
+                new CustomException(ErrorCode.WRONG_POST_PID));
     }
 
 }

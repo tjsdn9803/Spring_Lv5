@@ -4,6 +4,8 @@ package com.sparta.spartalevel1.service;
 import com.sparta.spartalevel1.dto.SignupRequestDto;
 import com.sparta.spartalevel1.entity.User;
 import com.sparta.spartalevel1.entity.UserRoleEnum;
+import com.sparta.spartalevel1.exception.CustomException;
+import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,15 +29,15 @@ public class UserService {
 
         // 회원 중복 확인
         Optional<User> checkUsername = userRepository.findByUsername(username);
-        if (checkUsername.isPresent()) {
-            throw new IllegalArgumentException("중복된 사용자가 존재합니다.");
+        if (!(checkUsername.isEmpty())) {
+            throw new CustomException(ErrorCode.NAME_SAME);
         }
 
         // email 중복확인
         String email = requestDto.getEmail();
         Optional<User> checkEmail = userRepository.findByEmail(email);
         if (checkEmail.isPresent()) {
-            throw new IllegalArgumentException("중복된 Email 입니다.");
+            throw new CustomException(ErrorCode.EMAIL_SAME);
         }
 
         // 사용자 ROLE 확인

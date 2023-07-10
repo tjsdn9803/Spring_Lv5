@@ -1,6 +1,7 @@
 package com.sparta.spartalevel1.controller;
 
 
+import com.sparta.spartalevel1.dto.JsonResponse;
 import com.sparta.spartalevel1.dto.Result;
 import com.sparta.spartalevel1.dto.SignupRequestDto;
 import com.sparta.spartalevel1.service.UserService;
@@ -35,22 +36,18 @@ public class UserController {
     }
 
     @PostMapping("/user/signup")
-    public ResponseEntity signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
+    public JsonResponse<Result> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         // Validation 예외처리
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
         if(fieldErrors.size() > 0) {
             for (FieldError fieldError : bindingResult.getFieldErrors()) {
                 log.error(fieldError.getField() + " 필드 : " + fieldError.getDefaultMessage());
             }
-            return new ResponseEntity(new Result("형식에 맞지 않습니다.", 403), HttpStatusCode.valueOf(403));
+            return JsonResponse.error("fail",new Result("회원가입에 실패하였습니다.", 403));
         }
-        // 중복 username, email 예외처리
-        try{
-            userService.signup(requestDto);
-        }catch (Exception e){
-            return new ResponseEntity(new Result(e.getMessage(), 403), HttpStatusCode.valueOf(403));
-        }
-        return new ResponseEntity(new Result("회원가입 성공", 200),HttpStatusCode.valueOf(200));
+        userService.signup(requestDto);
+        Result result = new Result("회원가입을 성공하였습니다", 200);
+        return JsonResponse.success(result);
     }
 
 }

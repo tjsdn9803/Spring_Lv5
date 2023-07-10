@@ -34,18 +34,18 @@ public class LikeController {
     }
 
     @PostMapping("/like/comment")
-    public ResponseEntity likeComment(@RequestParam Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public JsonResponse<Result> likeComment(@RequestParam Long commentId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
         likeService.commentLike(commentId, user);
-        return new ResponseEntity(new Result("댓글에 좋아요가 저장되었습니다.", 200), HttpStatusCode.valueOf(200));
+        Result result = new Result("댓글에 좋아요가 저장되었습니다", 200);
+        return JsonResponse.success(result);
     }
 
     @DeleteMapping("/like/comment")
-    public ResponseEntity deleteLikeComment(@RequestParam Long commentLikeId, @AuthenticationPrincipal UserDetailsImpl userDetails){
+    public JsonResponse<Result> deleteLikeComment(@RequestParam Long commentLikeId, @AuthenticationPrincipal UserDetailsImpl userDetails){
         User user = userDetails.getUser();
         likeService.deleteCommentLike(commentLikeId, user);
-        return new ResponseEntity(new Result("댓글에 좋아요가 삭제되었습니다", 200), HttpStatusCode.valueOf(200));
+        Result result = new Result("댓글에 좋아요가 삭제되었습니다", 200);
+        return JsonResponse.success(result);
     }
-
-
 }
