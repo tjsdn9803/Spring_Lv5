@@ -35,12 +35,11 @@ public class PostService {
 
 
     public List<PostResponseDto> getPosts() {
-        List<PostResponseDto> list = postRepository.findAllByOrderByCreatedAtDesc().stream().map(PostResponseDto::new).toList();
+        List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();
         List<PostResponseDto> responseDtoList = new ArrayList<>();
-        for(PostResponseDto a : list){
-            Post post = findPost(a.getId());
+        for(Post a : list){
             List<CommentResponseDto> commentResponseDtoList = findComments(a.getId());
-            PostResponseDto postResponseDto = new PostResponseDto(post, commentResponseDtoList);
+            PostResponseDto postResponseDto = new PostResponseDto(a, commentResponseDtoList);
             responseDtoList.add(postResponseDto);
         }
         return responseDtoList;

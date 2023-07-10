@@ -25,16 +25,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/user/login-page")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/user/signup")
-    public String signupPage() {
-        return "signup";
-    }
-
     @PostMapping("/user/signup")
     public JsonResponse<Result> signup(@RequestBody @Valid SignupRequestDto requestDto, BindingResult bindingResult, HttpServletResponse httpServletResponse) {
         // Validation 예외처리
