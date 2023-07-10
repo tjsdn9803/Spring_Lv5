@@ -21,9 +21,7 @@ public class LikeService {
     private final CommentRepository commentRepository;
 
     public void postLike(Long postId, User user) {
-        Post post = postRepository.findById(postId).orElseThrow(()->
-                new IllegalArgumentException("게시글이 존재하지 않습니다.")
-        );
+        Post post = findPost(postId);
         PostLike postLike = new PostLike(post, user);
         postLikeRepository.save(postLike);
     }

@@ -17,7 +17,7 @@ public class LikeController {
     @PostMapping("/like/post")
     public void postLike(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
-        likeService.postLike(id, user);
+        likeService.postLike(postId, user);
     }
   
 
