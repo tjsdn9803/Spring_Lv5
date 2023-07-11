@@ -71,9 +71,6 @@ public class PostService {
         return productList.map(PostResponseDto::new);
     }
 
-
-
-
     @Transactional
     public PostResponseDto getPost(Long id) {
         Post post = findPost(id);
