@@ -37,6 +37,10 @@ public class Post extends TimeStamped{
 
     private Long likeCount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>();
 

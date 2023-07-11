@@ -3,6 +3,7 @@ package com.sparta.spartalevel1.service;
 import com.sparta.spartalevel1.dto.CommentResponseDto;
 import com.sparta.spartalevel1.dto.PostRequestDto;
 import com.sparta.spartalevel1.dto.PostResponseDto;
+import com.sparta.spartalevel1.entity.Category;
 import com.sparta.spartalevel1.entity.Comment;
 import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.entity.User;

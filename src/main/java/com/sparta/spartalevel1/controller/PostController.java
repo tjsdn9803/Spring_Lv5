@@ -47,8 +47,12 @@ public class PostController {
 
     @GetMapping("/posts/search/paging")
     public JsonResponse<Page<PostResponseDto>> getPostsPaging(int size, int page, String sortBy, boolean isAsc){
-        System.out.println(1);
         return JsonResponse.success(postService.getPosts(size, page-1, sortBy, isAsc));
+    }
+
+    @GetMapping("/posts/search/category")
+    public JsonResponse<Page<PostResponseDto>> getPostsByCategory(int size, int page, String sortBy, boolean isAsc, @RequestParam Long categoryId){
+        return JsonResponse.success(postService.getPostsByCategory(size, page-1, sortBy, isAsc, categoryId));
     }
 
     @GetMapping("/post/search")
