@@ -16,6 +16,7 @@ public enum ErrorCode {
     NAME_SAME(HttpStatus.BAD_REQUEST, "중복된 username 입니다."),
     EMAIL_SAME(HttpStatus.BAD_REQUEST, "중복된 이메일 입니다."),
     WRONG_ADMIN_PASSWORD(HttpStatus.BAD_REQUEST, "관리자 암호가 다릅니다."),
+    WRONG_NAME_WITHDRAWL(HttpStatus.BAD_REQUEST, "본인만 회원탈퇴할 수 있습니다."),
 
 
     //Token

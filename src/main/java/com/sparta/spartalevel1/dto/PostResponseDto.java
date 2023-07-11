@@ -24,9 +24,10 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.author = post.getAuthor();
+        this.like = (long) post.getPostLikeList().size();
         this.createdAt = post.getCreatedAt();
         this.modifiedAt = post.getModifiedAt();
-        this.like = (long) post.getPostLikeList().size();
+        this.commentList = post.getCommentList().stream().map(CommentResponseDto::new).toList();
     }
 
     public PostResponseDto(Post post, List<CommentResponseDto> commentList) {

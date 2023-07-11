@@ -45,6 +45,22 @@ public class PostService {
         return responseDtoList;
     }
 
+    public Page<PostResponseDto> getPosts(int size, int page, String sortBy, boolean isAsc) {
+
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Post> productList = postRepository.findAll(pageable);
+//        List<PostResponseDto> responseDtoList = new ArrayList<>();
+//        for(Post a : productList){
+//            List<CommentResponseDto> commentResponseDtoList = findComments(a.getId());
+//            PostResponseDto postResponseDto = new PostResponseDto(a, commentResponseDtoList);
+//            responseDtoList.add(postResponseDto);
+//        }
+        return productList.map(PostResponseDto::new);
+    }
+
+
     @Transactional
     public PostResponseDto getPost(Long id) {
         Post post = findPost(id);

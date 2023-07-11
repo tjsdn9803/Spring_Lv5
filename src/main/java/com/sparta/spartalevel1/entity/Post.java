@@ -44,6 +44,7 @@ public class Post extends TimeStamped{
         this.author = user.getUsername();
         this.user = user;
         this.content = postRequestDto.getContent();
+        this.likeCount = 0L;
     }
 
     public void update(PostRequestDto postRequestDto, User user) {

@@ -11,6 +11,8 @@ import com.sparta.spartalevel1.security.UserDetailsImpl;
 import com.sparta.spartalevel1.service.PostService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -41,6 +43,12 @@ public class PostController {
     @GetMapping("/posts/search")
     public JsonResponse<List<PostResponseDto>> getPosts(){
         return JsonResponse.success(postService.getPosts());
+    }
+
+    @GetMapping("/posts/search/paging")
+    public JsonResponse<Page<PostResponseDto>> getPostsPaging(int size, int page, String sortBy, boolean isAsc){
+        System.out.println(1);
+        return JsonResponse.success(postService.getPosts(size, page-1, sortBy, isAsc));
     }
 
     @GetMapping("/post/search")
