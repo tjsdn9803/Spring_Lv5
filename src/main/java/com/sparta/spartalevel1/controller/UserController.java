@@ -4,6 +4,8 @@ package com.sparta.spartalevel1.controller;
 import com.sparta.spartalevel1.dto.JsonResponse;
 import com.sparta.spartalevel1.dto.Result;
 import com.sparta.spartalevel1.dto.SignupRequestDto;
+import com.sparta.spartalevel1.entity.User;
+import com.sparta.spartalevel1.security.UserDetailsImpl;
 import com.sparta.spartalevel1.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -11,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -37,6 +40,13 @@ public class UserController {
         }
         userService.signup(requestDto);
         Result result = new Result("회원가입을 성공하였습니다", 200);
+        return JsonResponse.success(result);
+    }
+    @DeleteMapping("/user/withdrawal")
+    public JsonResponse<Result> withdrawal(@RequestParam Long id, @AuthenticationPrincipal UserDetailsImpl userDetails){
+        User user = userDetails.getUser();
+        userService.withdrawal(id, user);
+        Result result = new Result("회원탈퇴가 성공적으로 처리되었습니다.",200);
         return JsonResponse.success(result);
     }
 

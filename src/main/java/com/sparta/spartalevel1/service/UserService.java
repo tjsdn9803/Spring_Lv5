@@ -7,6 +7,7 @@ import com.sparta.spartalevel1.entity.UserRoleEnum;
 import com.sparta.spartalevel1.exception.CustomException;
 import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.repository.UserRepository;
+import com.sparta.spartalevel1.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -52,5 +53,15 @@ public class UserService {
         // 사용자 등록
         User user = new User(username, password, email, role);
         userRepository.save(user);
+    }
+
+    public void withdrawal(Long id, User user) {
+        User user1 = userRepository.findById(id).orElseThrow(() ->
+                new CustomException(ErrorCode.LOGIN_NO));
+        if(!user1.getId().equals(user.getId())){
+            throw new CustomException(ErrorCode.WRONG_NAME_WITHDRAWL);
+        }
+        userRepository.delete(user);
+        
     }
 }

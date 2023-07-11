@@ -23,5 +23,7 @@ public class PostLike {
         this.post = post;
         this.user = user;
         post.getPostLikeList().add(this);
+        post.updateLikeCount();
     }
+
 }

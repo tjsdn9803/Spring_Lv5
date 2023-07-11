@@ -35,8 +35,9 @@ public class Post extends TimeStamped{
     @Column(name = "author", nullable = false)
     private String author;
 
+    private Long likeCount;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>();
 
     public Post(PostRequestDto postRequestDto, User user){
@@ -51,5 +52,8 @@ public class Post extends TimeStamped{
         this.title = postRequestDto.getTitle();
         this.content = postRequestDto.getContent();
         this.author = user.getUsername();
+    }
+    public void updateLikeCount(){
+        this.likeCount +=1;
     }
 }

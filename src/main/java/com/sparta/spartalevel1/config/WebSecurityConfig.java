@@ -70,6 +70,7 @@ public class WebSecurityConfig {
                         .requestMatchers("/api/user/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
                         .requestMatchers("/api/comment/search/**").permitAll()
                         .requestMatchers("/api/comments/search").permitAll()
+                        .requestMatchers("/api/posts/search/paging/**").permitAll()
                         .anyRequest().authenticated() // 그 외 모든 요청 인증처리
         );
 
