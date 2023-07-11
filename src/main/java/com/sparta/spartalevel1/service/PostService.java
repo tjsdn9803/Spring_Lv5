@@ -8,6 +8,7 @@ import com.sparta.spartalevel1.entity.Post;
 import com.sparta.spartalevel1.entity.User;
 import com.sparta.spartalevel1.exception.CustomException;
 import com.sparta.spartalevel1.exception.ErrorCode;
+import com.sparta.spartalevel1.repository.CategoryRepository;
 import com.sparta.spartalevel1.repository.CommentRepository;
 import com.sparta.spartalevel1.repository.PostRepository;
 import org.springframework.data.domain.Page;
@@ -25,14 +26,18 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
+    private final CategoryRepository categoryRepository;
 
-    public PostService(PostRepository postRepository, CommentRepository commentRepository) {
+    public PostService(PostRepository postRepository, CommentRepository commentRepository, CategoryRepository categoryRepository) {
         this.postRepository = postRepository;
         this.commentRepository = commentRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public PostResponseDto createPost(PostRequestDto postRequestDto, User user) {
-        Post post = new Post(postRequestDto, user);
+        Category category = categoryRepository.findById(postRequestDto.getCategoryId()).orElseThrow(() ->
+                new CustomException(ErrorCode.WRONG_CATEGORY_ID));
+        Post post = new Post(postRequestDto, user,category);
         Post savePost = postRepository.save(post);
         return new PostResponseDto(savePost);
     }
@@ -50,19 +55,22 @@ public class PostService {
     }
 
     public Page<PostResponseDto> getPosts(int size, int page, String sortBy, boolean isAsc) {
-
         Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
         Sort sort = Sort.by(direction, sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
         Page<Post> productList = postRepository.findAll(pageable);
-//        List<PostResponseDto> responseDtoList = new ArrayList<>();
-//        for(Post a : productList){
-//            List<CommentResponseDto> commentResponseDtoList = findComments(a.getId());
-//            PostResponseDto postResponseDto = new PostResponseDto(a, commentResponseDtoList);
-//            responseDtoList.add(postResponseDto);
-//        }
         return productList.map(PostResponseDto::new);
     }
+
+    public Page<PostResponseDto> getPostsByCategory(int size, int page, String sortBy, boolean isAsc, Long categoryId){
+        Sort.Direction direction = isAsc ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
+        Page<Post> productList = postRepository.findAllByCategoryId(categoryId, pageable);
+        return productList.map(PostResponseDto::new);
+    }
+
+
 
 
     @Transactional

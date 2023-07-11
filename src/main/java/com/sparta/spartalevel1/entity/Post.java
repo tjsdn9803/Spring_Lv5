@@ -40,12 +40,14 @@ public class Post extends TimeStamped{
     @OneToMany(mappedBy = "post",cascade = CascadeType.REMOVE)
     private List<PostLike> postLikeList = new ArrayList<>();
 
-    public Post(PostRequestDto postRequestDto, User user){
+    public Post(PostRequestDto postRequestDto, User user, Category category){
         this.title = postRequestDto.getTitle();
         this.author = user.getUsername();
         this.user = user;
         this.content = postRequestDto.getContent();
         this.likeCount = 0L;
+        this.category = category;
+        category.getPostList().add(this);
     }
 
     public void update(PostRequestDto postRequestDto, User user) {

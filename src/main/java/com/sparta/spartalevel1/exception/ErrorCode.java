@@ -28,7 +28,9 @@ public enum ErrorCode {
     WRONG_NAME(HttpStatus.BAD_REQUEST, "작성자만 삭제/수정할 수 있습니다."),
 
     //좋아요
-    WRONG_LIKE_PID(HttpStatus.BAD_REQUEST, "해당 좋아요가 존재하지 않습니다.")
+    WRONG_LIKE_PID(HttpStatus.BAD_REQUEST, "해당 좋아요가 존재하지 않습니다."),
+    //카테고리
+    WRONG_CATEGORY_ID(HttpStatus.BAD_REQUEST, "해당 카테고리가 없습니다.")
     ;
     private final HttpStatus status;
     private final String message;
