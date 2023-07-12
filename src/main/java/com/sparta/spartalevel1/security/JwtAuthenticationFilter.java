@@ -2,7 +2,11 @@ package com.sparta.spartalevel1.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sparta.spartalevel1.dto.LoginRequestDto;
+import com.sparta.spartalevel1.dto.TokenDto;
+import com.sparta.spartalevel1.entity.RefreshToken;
 import com.sparta.spartalevel1.entity.UserRoleEnum;
+import com.sparta.spartalevel1.exception.CustomException;
+import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.jwt.JwtUtil;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,6 +19,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -22,6 +27,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     public JwtAuthenticationFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
+        this.refreshTokenRepository = refreshTokenRepository;
         setFilterProcessesUrl("/api/user/login");
     }
 
@@ -49,9 +55,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
         UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
 
-        String token = jwtUtil.createToken(username, role);
+        TokenDto tokenDto = jwtUtil.createAllToken(username, role);
+        Optional<RefreshToken> refreshToken = refreshTokenRepository.findByUsername(username);
+
+        if(refreshToken.isPresent()){
+            refreshTokenRepository.save(refreshToken.get().updateToken(tokenDto.getRefreshToken()));
+        }else{
+            RefreshToken newToken = new RefreshToken(tokenDto.getRefreshToken(), username);
+            refreshTokenRepository.save(newToken);
+        }
+
         int status = response.getStatus();
-        String a = "{ \"msg\" : \"login success\", \n \"status\" : \""+ status+ "\" \n}";
+        String a = "{\n \"msg\" : \"login success\", \n \"status\" : \""+ status+ "\" \n}";
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.writeValueAsString(a);
@@ -60,7 +75,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, tokenDto.getAccessToken());
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, tokenDto.getRefreshToken());
     }
 
     @Override

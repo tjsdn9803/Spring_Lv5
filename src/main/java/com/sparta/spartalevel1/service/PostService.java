@@ -46,13 +46,7 @@ public class PostService {
 
     public List<PostResponseDto> getPosts() {
         List<Post> list = postRepository.findAllByOrderByCreatedAtDesc();
-        List<PostResponseDto> responseDtoList = new ArrayList<>();
-        for(Post a : list){
-            List<CommentResponseDto> commentResponseDtoList = findComments(a.getId());
-            PostResponseDto postResponseDto = new PostResponseDto(a, commentResponseDtoList);
-            responseDtoList.add(postResponseDto);
-        }
-        return responseDtoList;
+        return list.stream().map(PostResponseDto::new).toList();
     }
 
     public Page<PostResponseDto> getPosts(int size, int page, String sortBy, boolean isAsc) {
