@@ -8,6 +8,7 @@ import com.sparta.spartalevel1.entity.UserRoleEnum;
 import com.sparta.spartalevel1.exception.CustomException;
 import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.jwt.JwtUtil;
+import com.sparta.spartalevel1.repository.RefreshTokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -24,8 +25,9 @@ import java.util.Optional;
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     private final JwtUtil jwtUtil;
+    private final RefreshTokenRepository refreshTokenRepository;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, RefreshTokenRepository refreshTokenRepository) {
         this.jwtUtil = jwtUtil;
         this.refreshTokenRepository = refreshTokenRepository;
         setFilterProcessesUrl("/api/user/login");

@@ -1,7 +1,12 @@
 package com.sparta.spartalevel1.security;
 
+import com.sparta.spartalevel1.entity.User;
+import com.sparta.spartalevel1.exception.CustomException;
+import com.sparta.spartalevel1.exception.ErrorCode;
 import com.sparta.spartalevel1.jwt.JwtUtil;
+import com.sparta.spartalevel1.repository.UserRepository;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,10 +29,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
     private final UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
 
-    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService, UserRepository userRepository) {
         this.jwtUtil = jwtUtil;
         this.userDetailsService = userDetailsService;
+        this.userRepository = userRepository;
     }
 
     @Override
